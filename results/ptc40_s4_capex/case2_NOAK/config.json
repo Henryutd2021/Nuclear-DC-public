@@ -1,0 +1,128 @@
+{
+  "case": {
+    "case_id": 2,
+    "label": "Nuclear + cascaded extraction + absorption",
+    "equipment": {
+      "reactor_enabled": true,
+      "turbine_enabled": true,
+      "orc_enabled": false,
+      "absorption_chiller_enabled": true,
+      "electric_chiller_enabled": true,
+      "tes_enabled": false,
+      "bess_enabled": false,
+      "ngcc_enabled": false,
+      "grid_import_enabled": true,
+      "grid_export_enabled": true
+    },
+    "capacities": {
+      "reactor_thermal_capacity_MWth": 870.0,
+      "turbine_capacity_MWe": 316.0,
+      "orc_capacity_MWe": null,
+      "absorption_capacity_MWth": 160.0,
+      "electric_chiller_capacity_MWth": 160.0,
+      "tes_capacity_MWh_th": null,
+      "bess_capacity_MWh": 100.0,
+      "bess_power_MW": 50.0,
+      "ngcc_capacity_MWe": null,
+      "pcc_capacity_MW": null
+    },
+    "vcc": {
+      "cop_baseline": 3.5,
+      "cop_houston": 3.2,
+      "fixed_om_usd_per_kWth_year": 8.0,
+      "variable_om_usd_per_mwh_th": 0.5,
+      "capex_usd_per_kWth": 250.0,
+      "lifetime_years": 25,
+      "cop_design_wet_bulb_C": 26.0,
+      "cop_wet_bulb_relief_per_K": 0.01364,
+      "cop_wet_bulb_relief_cap": 1.182
+    },
+    "ngcc": null,
+    "reactor": {
+      "thermal_power_MWth": 870.0,
+      "electric_power_net_MWe": 300.0,
+      "thermal_efficiency": 0.344827586207,
+      "capex_usd_per_kWe": 2250.0,
+      "fixed_om_usd_per_kWe_year": 121.0,
+      "variable_om_usd_per_mwh_e": 3.5,
+      "fuel_cost_usd_per_mwh_e": 10.0,
+      "co2_lifecycle_g_per_kwh_e": 12.0,
+      "co2_billed_g_per_kwh_e": null,
+      "min_load_fraction": 0.5,
+      "ramp_rate_pct_per_min": 0.5,
+      "capacity_factor": 0.92,
+      "scheduled_outage_hours": null,
+      "lifetime_years": 40
+    },
+    "turbine": {
+      "rated_efficiency": 0.363218390805,
+      "capex_usd_per_kWe": 0.0,
+      "fixed_om_usd_per_kWe_year": 0.0,
+      "variable_om_usd_per_mwh_e": 0.0,
+      "aux_load_fraction": 0.0506329113924,
+      "main_willans_slope_MWe_per_MWth": 0.3909868,
+      "main_willans_intercept_MWe": 24.163466666667,
+      "extraction_willans_slope_MWe_per_MWth": 0.2
+    },
+    "orc": null,
+    "absorption": {
+      "capex_usd_per_kWth": 750.0,
+      "fixed_om_usd_per_kWth_year": 20.0,
+      "variable_om_usd_per_mwh_th": 0.4,
+      "cop_nameplate": 1.3,
+      "cop_houston_baseline": 1.1,
+      "derate_per_celsius_above_baseline": 0.015,
+      "cooling_water_approach_K": 5.0,
+      "crystallization_cw_inlet_C": 34.0,
+      "parasitic_kWe_per_kWth": 0.035,
+      "lifetime_years": 25,
+      "availability": 1.0,
+      "scheduled_maintenance_hours": null
+    },
+    "bess": {
+      "capex_usd_per_kwh": 529.0,
+      "fixed_om_usd_per_kw_year": 26.5,
+      "variable_om_usd_per_mwh": 0.5,
+      "round_trip_efficiency": 0.85,
+      "self_discharge_per_hour": 4.17e-05,
+      "soc_min_fraction": 0.05,
+      "soc_max_fraction": 0.95,
+      "initial_soc_fraction": 0.5,
+      "lifetime_years": 15,
+      "end_of_life_credit_pct": 5.0
+    }
+  },
+  "base": {
+    "time": {
+      "num_hours": 168,
+      "delta_t": 1.0
+    },
+    "solver": {
+      "name": "gurobi",
+      "mip_gap": 0.0001,
+      "time_limit": null,
+      "threads": 1,
+      "log_to_console": true,
+      "log_to_file": true,
+      "seed": 42,
+      "method": 2
+    },
+    "physics": {
+      "pue_default": 1.35,
+      "cooling_chain_efficiency": 0.9,
+      "carbon_price_usd_per_tco2": 0.0
+    }
+  },
+  "financial": {
+    "WACC_nominal": 0.067,
+    "WACC_real": 0.044,
+    "inflation_rate": 0.022,
+    "project_lifetime_years": 40,
+    "capital_recovery_factor": 0.0922,
+    "capital_recovery_factor_formula": "i*(1+i)^n / ((1+i)^n - 1)",
+    "reactor_physical_life_years": 60,
+    "ptc_usd_per_mwh_assumed": 30.0,
+    "ptc_credit_duration_years": 10,
+    "nuclear_ptc_enabled": true
+  }
+}

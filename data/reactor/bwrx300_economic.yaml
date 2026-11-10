@@ -1,0 +1,26 @@
+# BWRX-300 overnight capital cost scenarios for the S4 sensitivity
+# (read by with_reactor_capex in src/config.py). Other reactor cost and
+# performance parameters are set in config/plant_case{1,2}.yaml.
+#
+# FOAK: Ontario Power Generation, Darlington New Nuclear Project, budget
+#   approved in September 2024. The SMR-unit budget is CAD 6.1 billion for one
+#   300 MWe-net unit; the CAD 1.6 billion site budget is shared by four planned
+#   units and excluded. At 0.73 USD/CAD this gives about 14,800 $/kWe, used as
+#   14,700. https://www.opg.com/projects-services/projects/nuclear/dnnp/
+# ATB_Mid: NLR Annual Technology Baseline 2024, Nuclear SMR, Moderate case.
+#   https://atb.nlr.gov/electricity/2024/nuclear
+# NOAK: GE-Hitachi long-run vendor target for the BWRX-300.
+#
+# For comparison, the Idaho National Laboratory review of 35 bottom-up SMR
+# estimates (INL/RPT-24-77048) spans about 5,000-12,000 $/kWe.
+
+scenarios:
+  FOAK:
+    label: "First-of-a-kind, OPG Darlington SMR-unit budget"
+    overnight_capital_cost_usd_per_kWe: 14700
+  ATB_Mid:
+    label: "NLR ATB 2024 Moderate SMR"
+    overnight_capital_cost_usd_per_kWe: 7615
+  NOAK:
+    label: "Nth-of-a-kind, GE-Hitachi vendor target"
+    overnight_capital_cost_usd_per_kWe: 2250

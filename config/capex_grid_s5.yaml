@@ -1,0 +1,63 @@
+# S5 - SMR × absorption CAPEX 2D feasibility grid
+#
+# Hold all other inputs at the
+# baseline (Case 2, ERCOT 2023, full-load PUE 1.35, no BESS) and sweep two CAPEX
+# axes jointly to draw the Premium=0 economic feasibility contour.
+#
+# SMR axis adds two interior points to S4's three (FOAK / ATB-Mid / NOAK)
+# so the contour can interpolate cleanly. Absorption axis spans the
+# bare-equipment lower bound (ORNL Pub14546) through turnkey high
+# (Shahzad 2021 worst case).
+#
+# Solve count = 5 × 5 = 25 (all Case 2).
+# Combined with baseline + S1 + S2 + S3 + S4 = 4 + 6 + 12 + 8 + 6 + 25 = 61.
+
+axes:
+  smr_capex_usd_per_kWe:
+    # Tags match scripts/run_all_analyses.py:RunSpec.smr_capex_tag
+    - tag: "NOAK"
+      value: 2250            # GE-Hitachi NOAK target - matches FOAK/ATB/NOAK
+    - tag: "Low_Mid"
+      value: 5000            # interior point bridging NOAK and ATB-Mid
+    - tag: "ATB_Mid"
+      value: 7615            # NLR ATB 2024 Moderate - matches S4
+    - tag: "High_Mid"
+      value: 11000           # interior point bridging ATB-Mid and FOAK
+    - tag: "FOAK"
+      value: 14700           # OPG Darlington empirical budget - matches S4
+
+  absorption_capex_usd_per_kWth:
+    # Tags match scripts/run_all_analyses.py:RunSpec.absorption_capex_tag
+    - tag: "Bare_Low"
+      value: 450             # ORNL Pub14546 bare-equipment lower bound
+    - tag: "Mid_Low"
+      value: 600
+    - tag: "Baseline"
+      value: 750             # Shahzad 2021 + DOE CHP 2017 - Case 2 default
+    - tag: "Mid_High"
+      value: 900
+    - tag: "Turnkey_High"
+      value: 1200            # Shahzad 2021 worst-case turnkey upper bound
+
+# Five reference points overlaid on the margin heatmap:
+anchors:
+  - label: "OPG FOAK + Shahzad baseline"
+    smr_tag: "FOAK"
+    absorption_tag: "Baseline"
+    marker: "red_circle"
+  - label: "GE NOAK + Shahzad baseline"
+    smr_tag: "NOAK"
+    absorption_tag: "Baseline"
+    marker: "green_circle"
+  - label: "NLR ATB-Mid + Shahzad baseline"
+    smr_tag: "ATB_Mid"
+    absorption_tag: "Baseline"
+    marker: "yellow_circle"
+  - label: "GE NOAK + ORNL low (most optimistic)"
+    smr_tag: "NOAK"
+    absorption_tag: "Bare_Low"
+    marker: "blue_circle"
+  - label: "OPG FOAK + turnkey high (most pessimistic)"
+    smr_tag: "FOAK"
+    absorption_tag: "Turnkey_High"
+    marker: "purple_circle"

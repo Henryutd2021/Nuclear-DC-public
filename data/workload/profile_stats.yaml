@@ -1,0 +1,34 @@
+nameplate_it_capacity_MW: 200
+source_facility: NLR 10 MW colocation facility, 2840 nodes, scaled by 20
+measurement_year: 2018
+aggregation: hourly mean of 1-minute values
+baseline_utilization: 60u
+statistics_per_utilization:
+  20u:
+    mean_MW: 47.57681729439538
+    min_MW: 23.9696
+    max_MW: 113.07520444878864
+    std_MW: 16.79785631040219
+    rows: 8760
+    csv: dc_200mw_real_20u_2018.csv
+  40u:
+    mean_MW: 71.14349650411681
+    min_MW: 23.994928193858705
+    max_MW: 142.34313766608224
+    std_MW: 31.57514859283613
+    rows: 8760
+    csv: dc_200mw_real_40u_2018.csv
+  60u:
+    mean_MW: 94.71090383353527
+    min_MW: 24.02340381347495
+    max_MW: 142.4369560032248
+    std_MW: 37.95757788898792
+    rows: 8760
+    csv: dc_200mw_real_60u_2018.csv
+  80u:
+    mean_MW: 118.16769299008678
+    min_MW: 24.193891571147315
+    max_MW: 142.44858735612658
+    std_MW: 35.3388443670177
+    rows: 8760
+    csv: dc_200mw_real_80u_2018.csv

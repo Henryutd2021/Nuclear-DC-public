@@ -1,0 +1,29 @@
+# Financial parameters shared by all cases (read by src/config.py).
+#
+# WACC, inflation and the 20-year TAC window follow the NLR Annual Technology
+# Baseline 2024 financial assumptions (https://atb.nlr.gov). The production
+# tax credit follows 26 U.S.C. 45Y and the calendar-2025 applicable amount
+# published in the Federal Register (90 FR, 25 Aug 2025); the same $30/MWh,
+# 10-year parameterization is used by Li et al. (2026), Nat. Commun.,
+# doi:10.1038/s41467-026-73630-y.
+
+financial:
+  WACC_nominal: 0.067                    # 6.7%, NLR ATB 2024 nuclear, private financing
+  WACC_real: 0.044                       # (1 + WACC_nominal) / (1 + inflation) - 1
+  inflation_rate: 0.022                  # US long-run CPI assumption
+  project_lifetime_years: 20             # TAC comparison window (non-reactor assets)
+  capital_recovery_factor: 0.0922        # CRF(i=6.7%, n=20)
+  capital_recovery_factor_formula: "i*(1+i)^n / ((1+i)^n - 1)"
+
+  # The reactor is amortized over 40 years (CRF 0.0724 at 6.7%), set per case
+  # through reactor.lifetime_years in config/plant_case{1,2}.yaml. The
+  # physical design life is longer.
+  reactor_physical_life_years: 60
+
+  # Section 45Y clean electricity production credit for a new zero-emission
+  # facility. At the prevailing-wage rate the 2025 credit is 3.0 cents/kWh.
+  # It is paid for 10 years from commissioning and levelized over the
+  # 20-year TAC window in builder.py (x0.657 at 6.7%, i.e. $19.70/MWh).
+  ptc_usd_per_mwh_assumed: 30
+  ptc_credit_duration_years: 10
+  nuclear_ptc_enabled: true              # on for Cases 1-2

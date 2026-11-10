@@ -1,0 +1,21 @@
+# Henry Hub natural gas spot price, annual statistics 2022-2024 ($/MMBtu).
+# Computed from henry_hub_daily_2022_2024.csv (EIA series NG.RNGWHHD.D,
+# https://www.eia.gov/dnav/ng/hist/rngwhhdd.htm). src/data.py reads the
+# annual means; Case 3 prices fuel from the daily series.
+
+annual_summary:
+  2022:
+    mean_usd_per_mmbtu: 6.45
+    min_usd_per_mmbtu: 3.46
+    max_usd_per_mmbtu: 9.85
+    std_usd_per_mmbtu: 1.67
+  2023:
+    mean_usd_per_mmbtu: 2.53
+    min_usd_per_mmbtu: 1.74
+    max_usd_per_mmbtu: 3.78
+    std_usd_per_mmbtu: 0.38
+  2024:
+    mean_usd_per_mmbtu: 2.19
+    min_usd_per_mmbtu: 1.21
+    max_usd_per_mmbtu: 13.20
+    std_usd_per_mmbtu: 0.86

@@ -1,0 +1,13 @@
+pyomo>=6.7
+gurobipy>=11.0
+pandas>=2.0
+numpy>=1.24
+pyyaml>=6.0
+pydantic>=2.0
+matplotlib>=3.7
+psutil>=5.9
+pytest>=7.4
+
+# Only needed to re-download the input data (make data)
+gridstatus>=0.30
+xlrd>=2.0

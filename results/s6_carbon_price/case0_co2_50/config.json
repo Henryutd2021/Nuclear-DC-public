@@ -1,0 +1,80 @@
+{
+  "case": {
+    "case_id": 0,
+    "label": "Grid-only baseline",
+    "equipment": {
+      "reactor_enabled": false,
+      "turbine_enabled": false,
+      "orc_enabled": false,
+      "absorption_chiller_enabled": false,
+      "electric_chiller_enabled": true,
+      "tes_enabled": false,
+      "bess_enabled": false,
+      "ngcc_enabled": false,
+      "grid_import_enabled": true,
+      "grid_export_enabled": false
+    },
+    "capacities": {
+      "reactor_thermal_capacity_MWth": null,
+      "turbine_capacity_MWe": null,
+      "orc_capacity_MWe": null,
+      "absorption_capacity_MWth": null,
+      "electric_chiller_capacity_MWth": 160.0,
+      "tes_capacity_MWh_th": null,
+      "bess_capacity_MWh": null,
+      "bess_power_MW": null,
+      "ngcc_capacity_MWe": null,
+      "pcc_capacity_MW": null
+    },
+    "vcc": {
+      "cop_baseline": 3.5,
+      "cop_houston": 3.2,
+      "fixed_om_usd_per_kWth_year": 8.0,
+      "variable_om_usd_per_mwh_th": 0.5,
+      "capex_usd_per_kWth": 250.0,
+      "lifetime_years": 25,
+      "cop_design_wet_bulb_C": 26.0,
+      "cop_wet_bulb_relief_per_K": 0.01364,
+      "cop_wet_bulb_relief_cap": 1.182
+    },
+    "ngcc": null,
+    "reactor": null,
+    "turbine": null,
+    "orc": null,
+    "absorption": null,
+    "bess": null
+  },
+  "base": {
+    "time": {
+      "num_hours": 168,
+      "delta_t": 1.0
+    },
+    "solver": {
+      "name": "gurobi",
+      "mip_gap": 0.0001,
+      "time_limit": null,
+      "threads": 1,
+      "log_to_console": true,
+      "log_to_file": true,
+      "seed": 42,
+      "method": 2
+    },
+    "physics": {
+      "pue_default": 1.35,
+      "cooling_chain_efficiency": 0.9,
+      "carbon_price_usd_per_tco2": 50.0
+    }
+  },
+  "financial": {
+    "WACC_nominal": 0.067,
+    "WACC_real": 0.044,
+    "inflation_rate": 0.022,
+    "project_lifetime_years": 20,
+    "capital_recovery_factor": 0.0922,
+    "capital_recovery_factor_formula": "i*(1+i)^n / ((1+i)^n - 1)",
+    "reactor_physical_life_years": 60,
+    "ptc_usd_per_mwh_assumed": 30.0,
+    "ptc_credit_duration_years": 10,
+    "nuclear_ptc_enabled": true
+  }
+}

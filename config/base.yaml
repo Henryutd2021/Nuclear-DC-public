@@ -1,0 +1,24 @@
+# Base configuration - global defaults
+
+time:
+  num_hours: 168  # One week
+  delta_t: 1.0    # Hourly resolution
+
+solver:
+  name: gurobi
+  mip_gap: 0.0001     # 0.01% optimality gap (LPs ignore this)
+  time_limit: null    # No time limit (null = unlimited)
+  # threads: 0 = Gurobi default (use all cores). scripts/run_scenarios.py
+  # overrides this to one thread per solve and runs one solve per core.
+  threads: 16
+  method: 2           # Barrier
+  log_to_console: true
+  log_to_file: true
+  seed: 42            # Reproducibility
+
+physics:
+  # Cooling chain: heat to reject = P_IT / eta_chain. PUE is a reported outcome
+  # (1 + cooling parasitics / P_IT), not an input to the heat load. pue_default
+  # is retained only as a fallback label for legacy call paths.
+  pue_default: 1.35
+  cooling_chain_efficiency: 0.9

@@ -1,0 +1,50 @@
+# Case 0 - Grid-Only Data Center
+#
+# The DC buys all electricity from ERCOT, uses a vapor-compression
+# (electric) chiller for cooling. No reactor, no heat recovery. This is the
+# Heat-Recovery Premium denominator: every other case is benchmarked against
+# this baseline TAC.
+#
+# Case 0 runs as an INDEPENDENT LP (not part of the unified
+# MILP that ties Cases 1-3). With fixed PUE and no storage, the dispatch is
+# effectively closed-form: every hour, grid imports cover P_IT + Q_cool/COP_VCC.
+# We still construct a Pyomo model so the TAC accounting routes through the
+# same code path as Cases 1-3 (common accounting basis).
+
+case_id: 0
+label: "Grid-only baseline"
+
+equipment:
+  reactor_enabled:            false
+  turbine_enabled:            false
+  orc_enabled:                false
+  absorption_chiller_enabled: false
+  electric_chiller_enabled:   true     # vapor-compression chiller
+  tes_enabled:                false    # no thermal storage
+  bess_enabled:               false    # S3 toggled on later for Cases 1-3
+  ngcc_enabled:               false    # Case 4 only
+  grid_import_enabled:        true
+  grid_export_enabled:        false    # DC is a pure load; no surplus to sell
+
+# Equipment capacities (MW or MWth) - sized to reject the full IT heat load at
+# the worst hour: Q_cool_max = P_IT_max / eta_chain = 142.4 / 0.9 = 158.3 MWth.
+capacities:
+  electric_chiller_capacity_MWth: 160.0   # >= P_IT_max / eta_chain (158.3) + margin
+
+# Vapor-compression chiller performance (reference; no per-equipment
+# YAML exists for VCC yet, so values inlined here from ASHRAE typical centrifugal
+# chiller at Houston-grade ambient).
+# cop_houston is the design-point (T_wb = 26 °C) effective system COP; the
+# hourly wet-bulb relief below mirrors the relative linear COP(T_wb) response
+# the absorption chiller carries (0.015/1.10 per K, capped at 1.30/1.10), so
+# both cooling technologies see the same condenser-water benefit in cool hours.
+vcc:
+  cop_baseline:    3.5     # nameplate water-cooled centrifugal
+  cop_houston:     3.2     # design point at Houston wet-bulb 26°C (cooling-tower 31°C inlet)
+  cop_design_wet_bulb_C:      26.0
+  cop_wet_bulb_relief_per_K:  0.01364   # relative, = absorption 0.015/1.10
+  cop_wet_bulb_relief_cap:    1.182     # relative cap, = absorption 1.30/1.10
+  fixed_om_usd_per_kWth_year: 8
+  variable_om_usd_per_mwh_th: 0.5
+  capex_usd_per_kWth: 250  # installed turnkey (centrifugal, water-cooled)
+  lifetime_years: 25

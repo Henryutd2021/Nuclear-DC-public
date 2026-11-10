@@ -1,0 +1,88 @@
+# Case 1 - BWRX-300 + main turbine only, no heat recovery
+#
+# A nuclear plant powers the DC but throws away all of its
+# waste heat. Cooling is from a vapor-compression chiller (same as Case 0).
+# This is the "we built a reactor but didn't bother with cogen" reference
+# that quantifies how much value the heat-recovery system in Cases 2-3 adds.
+#
+# Grid is allowed but optional - the reactor at 92% CF and 300 MWe net is
+# more than enough for the 200 MW DC peak, so excess can be sold or curtailed.
+
+case_id: 1
+label: "Nuclear + turbine, no heat recovery"
+
+equipment:
+  reactor_enabled:            true
+  turbine_enabled:            true
+  orc_enabled:                false
+  absorption_chiller_enabled: false
+  electric_chiller_enabled:   true       # VCC
+  tes_enabled:                false      # no thermal storage in this paper
+  bess_enabled:               false      # S3 toggles on later
+  ngcc_enabled:               false
+  grid_import_enabled:        true       # backup if reactor in outage
+  grid_export_enabled:        true       # sell surplus to ERCOT
+
+capacities:
+  reactor_thermal_capacity_MWth: 870.0      # BWRX-300 nameplate
+  turbine_capacity_MWe:          316.0      # gross; net ≈ 300 after auxiliaries
+  electric_chiller_capacity_MWth: 160.0     # same VCC as Case 0 (>= 158.3 MWth)
+  bess_capacity_MWh:             100.0      # 100 MWh / 50 MW (C/2, 2 h storage)
+  bess_power_MW:                 50.0
+
+vcc:
+  cop_baseline:    3.5
+  cop_houston:     3.2
+  cop_design_wet_bulb_C:      26.0      # hourly wet-bulb relief - see plant_case0.yaml
+  cop_wet_bulb_relief_per_K:  0.01364
+  cop_wet_bulb_relief_cap:    1.182
+  fixed_om_usd_per_kWth_year: 8
+  variable_om_usd_per_mwh_th: 0.5
+  capex_usd_per_kWth: 250
+  lifetime_years: 25
+
+# BWRX-300 - baseline uses NLR ATB 2024 Moderate ($7,615/kWe).
+# Run S4 sensitivity by overriding capex_usd_per_kWe to 14700 (FOAK) or 2250 (NOAK).
+reactor:
+  thermal_power_MWth:           870
+  electric_power_net_MWe:       300
+  thermal_efficiency:           0.344827586207  # net: 300/870
+  capex_usd_per_kWe:            7615      # NLR ATB 2024 Moderate baseline
+  fixed_om_usd_per_kWe_year:    121       # NLR ATB 2024
+  variable_om_usd_per_mwh_e:    3.50      # NLR ATB 2024
+  fuel_cost_usd_per_mwh_e:      10.0      # $/MWh_e net basis (Li et al. 2026 Nat. Commun.);
+                                          # builder converts to thermal via 300/870
+  co2_lifecycle_g_per_kwh_e:    12        # UNECE 2022 LCA
+  min_load_fraction:            0.50      # BWRX-300 min load (IAEA ARIS 2024)
+  ramp_rate_pct_per_min:        0.5       # GE General Description Rev. J, Table 21-1
+  capacity_factor:              0.92      # realized via scheduled refueling outage window
+  lifetime_years:               40        # Study capital-recovery assumption; technical design life is 60 years
+
+# GE General Description Rev. J (June 2026), Tables 2-1 and 21-1:
+# 870 MWth / 316 MWe gross / approximately 300 MWe net. The original
+# Willans fit to data/perf/turbine_hr.csv is scaled by 316/300 in both
+# slope and intercept, retaining its relative part-load shape. This is an
+# explicit approximation, not a vendor-validated part-load performance map.
+turbine:
+  rated_efficiency:               0.363218390805  # gross: 316/870
+  main_willans_slope_MWe_per_MWth: 0.3909868
+  main_willans_intercept_MWe:      24.163466666667
+  capex_usd_per_kWe:              0        # bundled into reactor OCC (NLR ATB convention)
+  fixed_om_usd_per_kWe_year:      0        # bundled
+  variable_om_usd_per_mwh_e:      0        # bundled
+  aux_load_fraction:              0.0506329113924  # 16/316; 316 gross → 300 net MWe
+
+# Lithium-ion BESS (NLR ATB 2024 Moderate,
+# 2-hour duration matching the 100 MWh / 50 MW configuration).
+# Used only when equipment.bess_enabled is flipped on for the S3 sensitivity.
+bess:
+  capex_usd_per_kwh:           529      # NLR ATB 2024 2-hr utility-scale battery OCC (2022$)
+  fixed_om_usd_per_kw_year:    26.5     # NLR ATB 2024 2-hr Moderate
+  variable_om_usd_per_mwh:     0.5
+  round_trip_efficiency:       0.85
+  self_discharge_per_hour:     0.0000417  # 0.1% per day / 24
+  soc_min_fraction:            0.05
+  soc_max_fraction:            0.95
+  initial_soc_fraction:        0.50
+  lifetime_years:              15
+  end_of_life_credit_pct:      5        # salvage value of cells/casing

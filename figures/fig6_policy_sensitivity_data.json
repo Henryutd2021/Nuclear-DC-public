@@ -1,0 +1,143 @@
+{
+  "source_table": "results/master_kpi_table.csv",
+  "panel_a": {
+    "case_colors": {
+      "0": "#FF7F7F",
+      "1": "#63C0EF",
+      "2": "#B9B9B9",
+      "3": "#FFD37F"
+    },
+    "solved_range_usd_per_tonne": [
+      0,
+      100
+    ],
+    "displayed_range_usd_per_tonne": [
+      0,
+      180.0
+    ],
+    "crossovers_usd_per_tonne": {
+      "1": 53.10010491404981,
+      "2": 64.00733431918609,
+      "3": 164.61559735057958
+    },
+    "solved_points": [
+      {
+        "case_id": 0,
+        "carbon_price_usd_per_tco2": 0.0,
+        "tac_usd_per_yr": 75869050.00119022
+      },
+      {
+        "case_id": 0,
+        "carbon_price_usd_per_tco2": 50.0,
+        "tac_usd_per_yr": 93998283.7155585
+      },
+      {
+        "case_id": 0,
+        "carbon_price_usd_per_tco2": 100.0,
+        "tac_usd_per_yr": 112127517.42992678
+      },
+      {
+        "case_id": 1,
+        "carbon_price_usd_per_tco2": 0.0,
+        "tac_usd_per_yr": 117535971.44144088
+      },
+      {
+        "case_id": 1,
+        "carbon_price_usd_per_tco2": 50.0,
+        "tac_usd_per_yr": 96430893.37083755
+      },
+      {
+        "case_id": 1,
+        "carbon_price_usd_per_tco2": 100.0,
+        "tac_usd_per_yr": 75325815.30023426
+      },
+      {
+        "case_id": 2,
+        "carbon_price_usd_per_tco2": 0.0,
+        "tac_usd_per_yr": 127212029.0189774
+      },
+      {
+        "case_id": 2,
+        "carbon_price_usd_per_tco2": 50.0,
+        "tac_usd_per_yr": 105289118.28718404
+      },
+      {
+        "case_id": 2,
+        "carbon_price_usd_per_tco2": 100.0,
+        "tac_usd_per_yr": 83115056.90506744
+      },
+      {
+        "case_id": 3,
+        "carbon_price_usd_per_tco2": 0.0,
+        "tac_usd_per_yr": 55576822.08038327
+      },
+      {
+        "case_id": 3,
+        "carbon_price_usd_per_tco2": 50.0,
+        "tac_usd_per_yr": 79869575.00174105
+      },
+      {
+        "case_id": 3,
+        "carbon_price_usd_per_tco2": 100.0,
+        "tac_usd_per_yr": 104162327.92309885
+      }
+    ],
+    "interpolation": "piecewise linear through all three reoptimized points",
+    "extrapolation": "last solved segment, 50 to100 dollars per tonne"
+  },
+  "panel_b": {
+    "baseline_margin_pct": -67.67315396328507,
+    "worse_color": "#BEE8FF",
+    "better_color": "#FF7F7F",
+    "axes": [
+      {
+        "axis": "Reactor capital",
+        "low_margin_pct": -270.5334194457182,
+        "high_margin_pct": 85.93945356152145,
+        "span_pp": 356.4728730072396
+      },
+      {
+        "axis": "Market year",
+        "low_margin_pct": -354.5362194509743,
+        "high_margin_pct": -26.96223489699897,
+        "span_pp": 327.5739845539753
+      },
+      {
+        "axis": "WACC",
+        "low_margin_pct": -157.0725995787456,
+        "high_margin_pct": -25.94074853305549,
+        "span_pp": 131.13185104569013
+      },
+      {
+        "axis": "Carbon price",
+        "low_margin_pct": -67.67315396328507,
+        "high_margin_pct": 25.87452321236885,
+        "span_pp": 93.54767717565392
+      },
+      {
+        "axis": "Data-center size",
+        "low_margin_pct": -122.58107640720588,
+        "high_margin_pct": -31.06787233401473,
+        "span_pp": 91.51320407319116
+      },
+      {
+        "axis": "Absorber capital",
+        "low_margin_pct": -75.5977475166924,
+        "high_margin_pct": -62.3900915943469,
+        "span_pp": 13.207655922345495
+      },
+      {
+        "axis": "PUE",
+        "low_margin_pct": -68.77512547952855,
+        "high_margin_pct": -56.226389568900316,
+        "span_pp": 12.548735910628238
+      },
+      {
+        "axis": "BESS on/off",
+        "low_margin_pct": -68.68249194406089,
+        "high_margin_pct": -67.67315396328507,
+        "span_pp": 1.0093379807758112
+      }
+    ]
+  }
+}

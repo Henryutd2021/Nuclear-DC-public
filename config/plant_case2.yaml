@@ -1,0 +1,122 @@
+# Case 2 - BWRX-300 + main turbine + cascaded HP extraction + absorption
+#
+# A nuclear plant powers the DC AND drives cooling from a
+# mid-pressure turbine tap (5-7 barg, ~160 C). Main steam first expands in
+# the HP turbine to make electricity; mid-pressure extraction goes to a
+# double-effect LiBr-H2O absorption chiller for DC cooling; remaining flow
+# continues through the LP turbine and condenser. The Willans-line slope
+# in the builder charges electricity penalty per MWth extracted - cascaded
+# heat use, NOT a parallel main-steam tap.
+#
+# A VCC stays installed and shares the cooling dispatch; it carries the full
+# load during crystallization-gate hours (cooling-water inlet > 34 C) and
+# the scheduled refueling outage.
+
+case_id: 2
+label: "Nuclear + cascaded extraction + absorption"
+
+equipment:
+  reactor_enabled:            true
+  turbine_enabled:            true
+  orc_enabled:                false      # no ORC
+  absorption_chiller_enabled: true
+  electric_chiller_enabled:   true       # VCC backup for crystallization gate
+  tes_enabled:                false
+  bess_enabled:               false      # S3 toggles on later
+  ngcc_enabled:               false
+  grid_import_enabled:        true       # backup during reactor outages
+  grid_export_enabled:        true       # sell surplus
+
+capacities:
+  reactor_thermal_capacity_MWth:  870.0
+  turbine_capacity_MWe:           316.0
+  absorption_capacity_MWth:       160.0   # can serve full DC cooling (158.3 MWth) when steam allows
+  electric_chiller_capacity_MWth: 160.0   # VCC backup carries full load during crystallization outage
+  bess_capacity_MWh:              100.0   # 100 MWh / 50 MW (C/2, 2 h storage)
+  bess_power_MW:                  50.0
+
+# Reactor + turbine identical to Case 1
+reactor:
+  thermal_power_MWth:           870
+  electric_power_net_MWe:       300
+  thermal_efficiency:           0.344827586207  # net: 300/870
+  capex_usd_per_kWe:            7615
+  fixed_om_usd_per_kWe_year:    121
+  variable_om_usd_per_mwh_e:    3.50
+  fuel_cost_usd_per_mwh_e:      10.0     # $/MWh_e net basis (Li et al. 2026 Nat. Commun.)
+  co2_lifecycle_g_per_kwh_e:    12
+  min_load_fraction:            0.50
+  ramp_rate_pct_per_min:        0.5       # GE General Description Rev. J, Table 21-1
+  capacity_factor:              0.92     # realized via scheduled refueling outage window
+  lifetime_years:               40       # Study capital-recovery assumption; technical design life is 60 years
+
+# Extraction Willans slope from the 7-bar crossover heat balance:
+#   main steam sat. 7.17 MPa (h = 2770 kJ/kg, s = 5.80); HP expansion to
+#   7 bar at eta_HP 0.85 gives h_ext = 2428 kJ/kg (x = 0.84).
+#   - lost LP work: isentropic drop 7 bar -> 6.9 kPa = 585 kJ/kg; at
+#     eta_LP 0.82 -> 480 kJ/kg per kg extracted
+#   - heat to absorber generator (condense to sat. liquid at 7 bar,
+#     h_f = 697): 2428 - 697 = 1731 kJ/kg (~2.0 MWth per kg/s)
+#   - hot-condensate-return credit: 165 C return displaces feedwater-heater
+#     extraction steam, (697 - 162) kJ/kg x ~27% marginal work ~ 145 kJ/kg
+#   => beta = (480 - 145) / 1731 = 0.19; baseline rounded to 0.20.
+# SI sensitivity sweeps 0.08-0.25 (the no-credit bound is 480/1731 = 0.28).
+turbine:
+  rated_efficiency:                            0.363218390805  # gross: 316/870
+  main_willans_slope_MWe_per_MWth:             0.3909868  # original fit scaled by 316/300; see Case 1
+  main_willans_intercept_MWe:                  24.163466666667    # see plant_case1.yaml
+  capex_usd_per_kWe:                           0
+  fixed_om_usd_per_kWe_year:                   0
+  variable_om_usd_per_mwh_e:                   0
+  aux_load_fraction:                           0.0506329113924  # 16/316
+  extraction_willans_slope_MWe_per_MWth:       0.20     # 7-bar tap heat balance (above)
+
+# Double-effect LiBr-H2O absorption chiller.
+# COP(T_wb) is computed by builder.py as min(cop_nameplate,
+# cop_houston_baseline - derate × (T_wb - 26 °C)); crystallization gate
+# forces VCC backup whenever cooling-water inlet > critical.
+absorption:
+  capex_usd_per_kWth:                       750
+  fixed_om_usd_per_kWth_year:               20
+  variable_om_usd_per_mwh_th:               0.4
+  cop_nameplate:                            1.30     # cap on effective COP
+  cop_houston_baseline:                     1.10     # at T_wb 26 C (paper anchor)
+  derate_per_celsius_above_baseline:        0.015    # ~1.5% absolute per C above 26 C
+  cooling_water_approach_K:                 5        # tower outlet = T_wb + 5 K
+  # Shutdown threshold = Houston design cw inlet (26 + 5 = 31 C) plus the
+  # datasheet's 3 K crystallization safety margin; double-effect LiBr vendor
+  # envelopes run to 34-35 C cw inlet.
+  crystallization_cw_inlet_C:               34
+  # Pump 0.020 + cooling-tower fan 0.015 per the equipment datasheet
+  # parasitics block - both charged per kWc of delivered absorption cooling.
+  parasitic_kWe_per_kWth:                   0.035
+  lifetime_years:                           25
+  # Annual maintenance is scheduled inside the reactor refueling outage
+  # window (the absorber has no steam source then), so no separate
+  # continuous availability derate is applied.
+  availability:                             1.0
+
+# VCC backup (same model as Cases 0/1, incl. hourly wet-bulb relief)
+vcc:
+  cop_baseline:                3.5
+  cop_houston:                 3.2
+  cop_design_wet_bulb_C:       26.0
+  cop_wet_bulb_relief_per_K:   0.01364
+  cop_wet_bulb_relief_cap:     1.182
+  fixed_om_usd_per_kWth_year:  8
+  variable_om_usd_per_mwh_th:  0.5
+  capex_usd_per_kWth:          250
+  lifetime_years:              25
+
+# Lithium-ion BESS - same spec as Case 1 (S3 binary sensitivity, 100 MWh / 50 MW, 2-hr)
+bess:
+  capex_usd_per_kwh:           529      # NLR ATB 2024 2-hr utility-scale battery OCC (2022$)
+  fixed_om_usd_per_kw_year:    26.5     # NLR ATB 2024 2-hr Moderate
+  variable_om_usd_per_mwh:     0.5
+  round_trip_efficiency:       0.85
+  self_discharge_per_hour:     0.0000417
+  soc_min_fraction:            0.05
+  soc_max_fraction:            0.95
+  initial_soc_fraction:        0.50
+  lifetime_years:              15
+  end_of_life_credit_pct:      5        # salvage value of cells/casing

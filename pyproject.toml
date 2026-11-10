@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# The import package is `src` (all code imports `src.*`).
+[tool.setuptools]
+packages = ["src", "src.cases", "src.milp", "src.results"]
+
+[project]
+name = "nuclear-dc"
+version = "1.0.0"
+description = "SMR cogeneration for data center IT and cooling loads: Pyomo + Gurobi model, inputs and results"
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Honglin Li"}]
+dependencies = [
+    "pyomo>=6.7",
+    "gurobipy>=11.0",
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "pyyaml>=6.0",
+    "pydantic>=2.0",
+    "matplotlib>=3.7",
+    "psutil>=5.9",
+]
+
+[project.optional-dependencies]
+data = ["gridstatus>=0.30", "xlrd>=2.0"]
+test = ["pytest>=7.4"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+addopts = "--strict-markers"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+]
